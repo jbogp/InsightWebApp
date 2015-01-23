@@ -65,7 +65,7 @@ trait MyService extends HttpService {
     path("topics1h") {
       get {
         val test = new ReadFromHbase
-        val test2 = test.readTrendsComments("trends1h", "val")
+        val test2 = test.readTrendsComments("topics1h", "val")
         
         respondWithMediaType(`text/html`) { // XML is marshalled to `text/xml` by default, so we simply override here
           complete(test2.mkString("</br>"))
@@ -76,7 +76,7 @@ trait MyService extends HttpService {
      path("topics12h") {
       get {
         val test = new ReadFromHbase
-        val test2 = test.readTrendsComments("trends12h", "val")
+        val test2 = test.readTrendsComments("topics12h", "val")
         
         respondWithMediaType(`text/html`) { // XML is marshalled to `text/xml` by default, so we simply override here
           complete(test2.mkString("</br>"))
@@ -86,7 +86,7 @@ trait MyService extends HttpService {
     path("topicsalltime") {
       get {
         val test = new ReadFromHbase
-        val test2 = test.readTrendsComments("trendsalltime", "val")
+        val test2 = test.readTrendsComments("topicsalltime", "val")
         
         respondWithMediaType(`text/html`) { // XML is marshalled to `text/xml` by default, so we simply override here
           complete(test2.mkString("</br>"))

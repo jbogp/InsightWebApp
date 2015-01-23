@@ -49,10 +49,12 @@ class ReadFromHbase {
 			val jsonString = {
 			  val col = next.getColumn("infos".getBytes(), column.getBytes())
 			  if(col.isEmpty())
-			    ""
-			  else
+			    """{"created_time":"never","from":"noone","like_counts":0,"message":"nothing"}"""
+			  else{
 			     new String(col.get(0).getValue())
+			  }
 			}
+			
 			val json = parse(jsonString)
 			json.extract[Comment]
 		}

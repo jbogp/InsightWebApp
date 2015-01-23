@@ -4,6 +4,7 @@ import akka.actor.Actor
 import spray.routing._
 import spray.http._
 import MediaTypes._
+import main.scala.hbase.ReadFromHbase
 
 // we don't implement our route structure directly in the service actor because
 // we want to be able to test it independently, without having to spin up an actor
@@ -26,11 +27,17 @@ trait MyService extends HttpService {
   val myRoute =
     path("") {
       get {
+        val test = new ReadFromHbase
+        val test2 = test.readTimeFilterComments("commentsalltime", "obama", 120, 0)
+        
         respondWithMediaType(`text/html`) { // XML is marshalled to `text/xml` by default, so we simply override here
           complete {
             <html>
               <body>
                 <h1>Time waster time saver</h1>
+        	  	<h3>{test2.foreach(f=>
+        	  	 	println(f)
+        	  	)}</h3>
               </body>
             </html>
           }

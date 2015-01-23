@@ -42,16 +42,16 @@ trait MyService extends HttpService {
   
 
   val myRoute =
-    path("saoudia") {
+    path("france") {
       get {
         val test = new ReadFromHbase
-        val test2 = test.readTimeFilterComments("commentsalltime", "saoudia", 600, 0)
+        val test2 = test.readTimeFilterComments("commentsalltime", "france", 600, 0)
         
         respondWithMediaType(`text/html`) { // XML is marshalled to `text/xml` by default, so we simply override here
           complete(test2.reduce((t,i)=> t:::i).map(t=>(t.message)).filter(p=>p != "nothing").mkString("</br>"))
         }
       }
-    }
+    }~
      path("federer") {
       get {
         val test = new ReadFromHbase
@@ -61,7 +61,7 @@ trait MyService extends HttpService {
           complete(test2.reduce((t,i)=> t:::i).map(t=>(t.message)).filter(p=>p != "nothing").mkString("</br>"))
         }
       }
-    }
+    }~
     path("topics1h") {
       get {
         val test = new ReadFromHbase
@@ -71,8 +71,7 @@ trait MyService extends HttpService {
           complete(test2.mkString("</br>"))
         }
       }
-    }
-    
+    }~   
      path("topics12h") {
       get {
         val test = new ReadFromHbase
@@ -82,7 +81,7 @@ trait MyService extends HttpService {
           complete(test2.mkString("</br>"))
         }
       }
-    }
+    }~
     path("topicsalltime") {
       get {
         val test = new ReadFromHbase

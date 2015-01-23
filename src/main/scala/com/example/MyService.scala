@@ -48,7 +48,7 @@ trait MyService extends HttpService {
         val test2 = test.readTimeFilterComments("comments1h", "king", 12000, 0)
         
         respondWithMediaType(`text/html`) { // XML is marshalled to `text/xml` by default, so we simply override here
-          complete(test2.toString)
+          complete(test2.reduce((t,i)=> t:::i).map(t=>(t.message)).mkString("</br>"))
         }
       }
     }

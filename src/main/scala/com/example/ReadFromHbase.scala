@@ -40,7 +40,7 @@ class ReadFromHbase {
 		ret		
 	}
 	
-	case class Comment(created_at:String,from:String,like_count:Int,message:String)
+	case class Comment(created_time:String,from:String,like_count:Int,message:String)
  
 	
 	def readTimeFilterComments(table:String,column:String,minutesBackMax:Int,minutesBackMin:Int):ArrayBuffer[Comment] =  {

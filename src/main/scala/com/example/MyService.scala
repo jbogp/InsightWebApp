@@ -42,14 +42,56 @@ trait MyService extends HttpService {
   
 
   val myRoute =
-    path("") {
+    path("saoudia") {
       get {
         val test = new ReadFromHbase
-        val test2 = test.readTimeFilterComments("comments1h", "king", 12000, 0)
+        val test2 = test.readTimeFilterComments("commentsalltime", "saoudia", 600, 0)
         
         respondWithMediaType(`text/html`) { // XML is marshalled to `text/xml` by default, so we simply override here
-          complete(test2.reduce((t,i)=> t:::i).map(t=>(t.message)).filter(p=>p == "nothing").mkString("</br>"))
+          complete(test2.reduce((t,i)=> t:::i).map(t=>(t.message)).filter(p=>p != "nothing").mkString("</br>"))
         }
       }
     }
+     path("federer") {
+      get {
+        val test = new ReadFromHbase
+        val test2 = test.readTimeFilterComments("commentsalltime", "federer", 600, 0)
+        
+        respondWithMediaType(`text/html`) { // XML is marshalled to `text/xml` by default, so we simply override here
+          complete(test2.reduce((t,i)=> t:::i).map(t=>(t.message)).filter(p=>p != "nothing").mkString("</br>"))
+        }
+      }
+    }
+    path("topics1h") {
+      get {
+        val test = new ReadFromHbase
+        val test2 = test.readTrendsComments("trends1h", "val")
+        
+        respondWithMediaType(`text/html`) { // XML is marshalled to `text/xml` by default, so we simply override here
+          complete(test2.mkString("</br>"))
+        }
+      }
+    }
+    
+     path("topics12h") {
+      get {
+        val test = new ReadFromHbase
+        val test2 = test.readTrendsComments("trends12h", "val")
+        
+        respondWithMediaType(`text/html`) { // XML is marshalled to `text/xml` by default, so we simply override here
+          complete(test2.mkString("</br>"))
+        }
+      }
+    }
+    path("topicsalltime") {
+      get {
+        val test = new ReadFromHbase
+        val test2 = test.readTrendsComments("trendsalltime", "val")
+        
+        respondWithMediaType(`text/html`) { // XML is marshalled to `text/xml` by default, so we simply override here
+          complete(test2.mkString("</br>"))
+        }
+      }
+    }
+  
 }

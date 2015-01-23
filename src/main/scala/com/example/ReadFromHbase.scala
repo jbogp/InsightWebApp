@@ -41,6 +41,25 @@ class ReadFromHbase {
 	}
 	
 	case class Comment(created_time:String,from:String,like_count:Int,message:String)
+	
+	
+	def readTrendsComments(table:String,column:String):ArrayBuffer[String] =  {
+		/*function to handle meta link results*/
+		def handleRow(next:Result):String = {
+			val jsonString = {
+			  val col = next.getColumn("infos".getBytes(), column.getBytes())
+			  if(col.isEmpty())
+			    "empty"
+			  else{
+			     new String(col.get(0).getValue())
+			  }
+			}
+			
+			jsonString
+		}
+		/*Calling the database*/
+		readTimeFilterGeneric[String](table, 30, 0, handleRow)
+	}
  
 	
 	def readTimeFilterComments(table:String,column:String,minutesBackMax:Int,minutesBackMin:Int):ArrayBuffer[List[Comment]] =  {

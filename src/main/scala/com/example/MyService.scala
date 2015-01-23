@@ -5,6 +5,10 @@ import spray.routing._
 import spray.http._
 import MediaTypes._
 import main.scala.hbase.ReadFromHbase
+import spray.httpx.marshalling.Marshaller
+
+
+
 
 // we don't implement our route structure directly in the service actor because
 // we want to be able to test it independently, without having to spin up an actor
@@ -23,6 +27,19 @@ class MyServiceActor extends Actor with MyService {
 
 // this trait defines our service behavior independently from the service actor
 trait MyService extends HttpService {
+  
+    def stringMarshaller(charset: HttpCharset, more: HttpCharset*): Marshaller[String] =
+    stringMarshaller(ContentType(`text/plain`, charset), more map (ContentType(`text/plain`, _)): _*)
+
+  //# string-marshaller
+  // prefer UTF-8 encoding, but also render with other encodings if the client requests them
+  implicit val StringMarshaller = stringMarshaller(ContentTypes.`text/plain(UTF-8)`, ContentTypes.`text/plain`)
+
+  def stringMarshaller(contentType: ContentType, more: ContentType*): Marshaller[String] =
+    Marshaller.of[String](contentType +: more: _*) { (value, contentType, ctx) ⇒
+      ctx.marshalTo(HttpEntity(contentType, value))
+    }
+  
 
   val myRoute =
     path("") {
@@ -31,14 +48,7 @@ trait MyService extends HttpService {
         val test2 = test.readTimeFilterComments("comments1h", "king", 12000, 0)
         
         respondWithMediaType(`text/html`) { // XML is marshalled to `text/xml` by default, so we simply override here
-          complete {
-            <html>
-              <body>
-                <h1>Time waster time saver</h1>
-        	  	{test2.foreach(f=>f.map(f=>"<h3>"+f.message+"</h3>"))}
-              </body>
-            </html>
-          }
+          complete(test2.toString)
         }
       }
     }

@@ -28,7 +28,7 @@ trait MyService extends HttpService {
     path("") {
       get {
         val test = new ReadFromHbase
-        val test2 = test.readTimeFilterComments("commentsalltime", "obama", 120, 0)
+        val test2 = test.readTimeFilterComments("commentsalltime", "obama", 12000, 0)
         
         respondWithMediaType(`text/html`) { // XML is marshalled to `text/xml` by default, so we simply override here
           complete {

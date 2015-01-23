@@ -35,7 +35,7 @@ trait MyService extends HttpService {
             <html>
               <body>
                 <h1>Time waster time saver</h1>
-        	  	{test2.foreach(f=>f.foreach(f=>"<h3>"+f+"</h3>"))}
+        	  	{test2.foreach(f=>f.map(f=>"<h3>"+f.message+"</h3>"))}
               </body>
             </html>
           }

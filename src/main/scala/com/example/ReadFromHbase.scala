@@ -58,7 +58,7 @@ class ReadFromHbase {
 			jsonString
 		}
 		/*Calling the database*/
-		readTimeFilterGeneric[String](table, 20, 0, handleRow)
+		readTimeFilterGeneric[String](table, 30, 0, handleRow)
 	}
  
 	

@@ -17,5 +17,5 @@ object Boot extends App {
 
   implicit val timeout = Timeout(5.seconds)
   // start a new HTTP server on port 8080 with our service actor as the handler
-  IO(Http) ? Http.Bind(service, interface = "ec2-54-67-99-96.us-west-1.compute.amazonaws.com", port = 8086)
+  IO(Http) ? Http.Bind(service, interface = "54.67.99.96", port = 8080)
 }

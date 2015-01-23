@@ -17,15 +17,15 @@ resolvers ++= Seq(
 scalacOptions := Seq("-unchecked", "-deprecation", "-encoding", "utf8")
 
 libraryDependencies ++= {
-  val akkaV = "2.3.6"
-  val sprayV = "1.1.2"
+  val akkaV = "2.2.4"
+  val sprayV = "1.2.2"
   Seq(
-    "io.spray"            %%  "spray-can"     % sprayV,
-    "io.spray"            %%  "spray-routing" % sprayV,
-    "io.spray"            %%  "spray-testkit" % sprayV  % "test",
+    "io.spray"            %   "spray-can"     % sprayV,
+    "io.spray"            %   "spray-routing" % sprayV,
+    "io.spray"            %   "spray-testkit" % sprayV  % "test",
     "com.typesafe.akka"   %%  "akka-actor"    % akkaV,
     "com.typesafe.akka"   %%  "akka-testkit"  % akkaV   % "test",
-    "org.specs2"          %%  "specs2-core"   % "2.3.11" % "test",
+    "org.specs2"          %%  "specs2-core"   % "2.3.7" % "test"
     "org.apache.hbase" % "hbase-client" % "0.98.6-cdh5.3.0",
     "org.apache.hbase" % "hbase-protocol" % "0.98.6-cdh5.3.0",
     "org.apache.hbase" % "hbase-common" % "0.98.6-cdh5.3.0",

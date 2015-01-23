@@ -43,23 +43,23 @@ class ReadFromHbase {
 	case class Comment(created_time:String,from:String,like_count:Int,message:String)
  
 	
-	def readTimeFilterComments(table:String,column:String,minutesBackMax:Int,minutesBackMin:Int):ArrayBuffer[Comment] =  {
+	def readTimeFilterComments(table:String,column:String,minutesBackMax:Int,minutesBackMin:Int):ArrayBuffer[List[Comment]] =  {
 		/*function to handle meta link results*/
-		def handleRow(next:Result):Comment = {
+		def handleRow(next:Result):List[Comment] = {
 			val jsonString = {
 			  val col = next.getColumn("infos".getBytes(), column.getBytes())
 			  if(col.isEmpty())
-			    """{"created_time":"never","from":"noone","like_count":0,"message":"nothing"}"""
+			    """[{"created_time":"never","from":"noone","like_count":0,"message":"nothing"}]"""
 			  else{
 			     new String(col.get(0).getValue())
 			  }
 			}
 			
 			val json = parse(jsonString)
-			json.extract[Comment]
+			json.extract[List[Comment]]
 		}
 		/*Calling the database*/
-		readTimeFilterGeneric[Comment](table, minutesBackMax, minutesBackMin, handleRow)
+		readTimeFilterGeneric[List[Comment]](table, minutesBackMax, minutesBackMin, handleRow)
 	}
 
 }

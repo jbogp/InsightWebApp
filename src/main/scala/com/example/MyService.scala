@@ -42,20 +42,20 @@ trait MyService extends HttpService {
   
 
   val myRoute =
-    path("france") {
+    path("chris") {
       get {
         val test = new ReadFromHbase
-        val test2 = test.readTimeFilterComments("commentsalltime", "france", 600, 0)
+        val test2 = test.readTimeFilterComments("commentsalltime", "chris", 600, 0)
         
         respondWithMediaType(`text/html`) { // XML is marshalled to `text/xml` by default, so we simply override here
           complete(test2.reduce((t,i)=> t:::i).map(t=>(t.message)).filter(p=>p != "nothing").mkString("</br>"))
         }
       }
     }~
-     path("federer") {
+     path("isis") {
       get {
         val test = new ReadFromHbase
-        val test2 = test.readTimeFilterComments("commentsalltime", "federer", 600, 0)
+        val test2 = test.readTimeFilterComments("commentsalltime", "isis", 600, 0)
         
         respondWithMediaType(`text/html`) { // XML is marshalled to `text/xml` by default, so we simply override here
           complete(test2.reduce((t,i)=> t:::i).map(t=>(t.message)).filter(p=>p != "nothing").mkString("</br>"))

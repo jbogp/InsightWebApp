@@ -10,7 +10,8 @@ resolvers ++= Seq(
   "Hadoop Releases" at "https://repository.cloudera.com/content/repositories/releases/",
   "Cloudera" at "https://repository.cloudera.com/artifactory/public/",
   "Cloudera2" at "http://repository.cloudera.com/cloudera/cloudera-repos/",
-  "releases" at "http://oss.sonatype.org/content/repositories/releases"
+  "releases" at "http://oss.sonatype.org/content/repositories/releases",
+  "spra" at "http://repo.spray.io/"
 )
 
 scalacOptions := Seq("-unchecked", "-deprecation", "-encoding", "utf8")

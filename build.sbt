@@ -25,7 +25,7 @@ libraryDependencies ++= {
     "io.spray"            %   "spray-testkit" % sprayV  % "test",
     "com.typesafe.akka"   %%  "akka-actor"    % akkaV,
     "com.typesafe.akka"   %%  "akka-testkit"  % akkaV   % "test",
-    "org.specs2"          %%  "specs2-core"   % "2.3.7" % "test"
+    "org.specs2"          %%  "specs2-core"   % "2.3.7" % "test",
     "org.apache.hbase" % "hbase-client" % "0.98.6-cdh5.3.0",
     "org.apache.hbase" % "hbase-protocol" % "0.98.6-cdh5.3.0",
     "org.apache.hbase" % "hbase-common" % "0.98.6-cdh5.3.0",

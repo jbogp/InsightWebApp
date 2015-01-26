@@ -15,6 +15,7 @@ import org.apache.hadoop.fs.viewfs.Constants
 import org.apache.hadoop.hbase.HBaseConfiguration
 import scala.concurrent._
 import ExecutionContext.Implicits.global
+import org.apache.hadoop.hbase.CellUtil
 
 
 class ReadFromHbase {
@@ -29,12 +30,17 @@ class ReadFromHbase {
 	implicit val formats = Serialization.formats(NoTypeHints)
 	
 	/*Generic Hbase reader to fetch all the rows of a table beetween 2 times and create objects out of that*/
-	def readTimeFilterGeneric[T](table:String,minutesBackMax:Int,minutesBackMin:Int,handleRow:Result=>T):ArrayBuffer[T] = {
+	def readTimeFilterGeneric[T](table:String,minutesBackMax:Int,minutesBackMin:Int,handleRow:Result=>T,column:String):ArrayBuffer[T] = {
 		/*Fetch the table*/
-		val httable = new HTable(config, table)
+		val conn = admin.getConnection()
+		val httable = conn.getTable(table)
+		
 		val offsetMax:Long = minutesBackMax*60000L
 		val offsetMin:Long = minutesBackMin*60000L
-		val theScan = new Scan().setTimeRange(Calendar.getInstance().getTimeInMillis()-offsetMax, Calendar.getInstance().getTimeInMillis()-offsetMin);
+		
+		
+
+		val theScan = new Scan().addColumn("infos".getBytes(),column.getBytes()).setTimeRange(Calendar.getInstance().getTimeInMillis()-offsetMax, Calendar.getInstance().getTimeInMillis()-offsetMin);
 		
 		/*Adding timestamp filter*/
 		val res = httable.getScanner(theScan)
@@ -57,13 +63,17 @@ class ReadFromHbase {
 		def handleRow(next:Result):String = {
 			val jsonString = {
 			  val col = next.getColumnLatestCell("infos".getBytes(), column.getBytes())
-			  new String(col.getValue())
+			  val value = CellUtil.cloneValue(col)
+			  if(value.length != 0)
+				  new String(value)
+			  else
+				  "empty"
 			}
 			
 			jsonString
 		}
 		/*Calling the database*/
-		readTimeFilterGeneric[String](table, 20, 0, handleRow)
+		readTimeFilterGeneric[String](table, 20, 0, handleRow,column)
 	}
  
 	
@@ -72,14 +82,18 @@ class ReadFromHbase {
 		def handleRow(next:Result):List[Comment] = {
 			val jsonString = {
 			  val col = next.getColumnLatestCell("infos".getBytes(), column.getBytes())
-			  new String(col.getValue())
+			  val value = CellUtil.cloneValue(col)
+			  if(value.length != 0)
+				  new String(value)
+			  else
+				  "empty"
 			}
 			
 			val json = parse(jsonString)
 			json.extract[List[Comment]]
 		}
 		/*Calling the database*/
-		readTimeFilterGeneric[List[Comment]](table, minutesBackMax, minutesBackMin, handleRow)
+		readTimeFilterGeneric[List[Comment]](table, minutesBackMax, minutesBackMin, handleRow,column)
 	}
 
 }

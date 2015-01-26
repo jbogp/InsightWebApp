@@ -62,7 +62,7 @@ trait MyService extends HttpService {
 			    	      }
 			    }
 			}
-		}
+		}~
 		path("topics"){
 			parameters('req) { (req) =>
 			    onComplete(test.readFutureTrendsComments(req,"val")) {

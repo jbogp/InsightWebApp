@@ -52,7 +52,6 @@ trait MyService extends HttpService {
 		    onComplete(test.readFutureTimeFilterComments("commentsalltime", req, 6000, 0)) {
 		    	      case Success(value) => respondWithMediaType(`text/html`) {
 		    	        complete{
-		    	        	GetCommentsTopic.getCommentsUlrs(value)
 		    	        	GetCommentsTopic.getCommentsHTML(value)
 		    	        }
 		    	      }

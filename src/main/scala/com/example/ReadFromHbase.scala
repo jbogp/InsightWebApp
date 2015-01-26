@@ -56,12 +56,8 @@ class ReadFromHbase {
 		/*function to handle meta link results*/
 		def handleRow(next:Result):String = {
 			val jsonString = {
-			  val col = next.getColumn("infos".getBytes(), column.getBytes())
-			  if(col.isEmpty())
-			    "empty"
-			  else{
-			     new String(col.get(0).getValue())
-			  }
+			  val col = next.getColumnLatestCell("infos".getBytes(), column.getBytes())
+			  new String(col.getValue())
 			}
 			
 			jsonString
@@ -75,12 +71,8 @@ class ReadFromHbase {
 		/*function to handle meta link results*/
 		def handleRow(next:Result):List[Comment] = {
 			val jsonString = {
-			  val col = next.getColumn("infos".getBytes(), column.getBytes())
-			  if(col.isEmpty())
-			    """[{"created_time":"never","from":"noone","like_count":0,"message":"nothing"}]"""
-			  else{
-			     new String(col.get(0).getValue())
-			  }
+			  val col = next.getColumnLatestCell("infos".getBytes(), column.getBytes())
+			  new String(col.getValue())
 			}
 			
 			val json = parse(jsonString)

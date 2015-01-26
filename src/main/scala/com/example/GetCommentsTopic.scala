@@ -5,8 +5,10 @@ import scala.collection.mutable.ArrayBuffer
 object GetCommentsTopic {
   
   	def getCommentsUlrs(value:ArrayBuffer[ListOfComments]):String = {
-		value.map(_.url)
+		val ret = value.map(_.url)
 			.mkString("<hr>")
+			println(ret)
+			ret
 	}
 
 	def getCommentsHTML(value:ArrayBuffer[ListOfComments]):String = {

@@ -45,7 +45,8 @@ class ReadFromHbase {
 		
 		
 
-		val theScan = new Scan().addColumn("infos".getBytes(),column.getBytes()).setTimeRange(Calendar.getInstance().getTimeInMillis()-offsetMax, Calendar.getInstance().getTimeInMillis()-offsetMin);
+		val theScan = new Scan().addColumn("infos".getBytes(),column.getBytes()).addColumn("infos".getBytes(),"theArticleLink".getBytes()).setTimeRange(Calendar.getInstance().getTimeInMillis()-offsetMax, Calendar.getInstance().getTimeInMillis()-offsetMin);
+		
 		
 		/*Adding timestamp filter*/
 		val res = httable.getScanner(theScan)

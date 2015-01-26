@@ -68,7 +68,10 @@ trait MyService extends HttpService {
 			    onComplete(test.readFutureTrendsComments(req,"val")) {
 			    	      case Success(value) => respondWithMediaType(`text/html`) {
 			    	        complete{
-			    	        	value.mkString("<hr>")
+			    	        	value.map(topic=>{
+			    	        		"<a href='/comments?req="+topic+">"+topic+"</a>"
+			    	        	}).mkString("<hr>")
+			    	        	
 			    	        }
 			    	      }
 			    	      case Failure(ex)    => {

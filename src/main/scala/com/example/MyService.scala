@@ -51,7 +51,9 @@ trait MyService extends HttpService {
 	val myRoute =
 		parameters('req) { (req) =>
 		    onComplete(test.readFutureTimeFilterComments("commentsalltime", req, 6000, 0)) {
-		    	      case Success(value) => complete(value.reduce((t,i)=> t:::i).map(t=>(t.message)).mkString("<hr>"))
+		    	      case Success(value) => respondWithMediaType(`text/html`) {
+		    	        complete(value.reduce((t,i)=> t:::i).map(t=>(t.message)).mkString("<hr>"))
+		    	      }
 		    	      case Failure(ex)    => {
 		    	        ex.printStackTrace()
 		    	        complete(s"An error occurred: ${ex.getStackTrace()}")

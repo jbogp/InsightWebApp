@@ -4,7 +4,6 @@ import akka.actor.Actor
 import spray.routing._
 import spray.http._
 import MediaTypes._
-import main.scala.hbase.ReadFromHbase
 import spray.httpx.marshalling.Marshaller
 import scala.concurrent._
 import ExecutionContext.Implicits.global
@@ -52,10 +51,10 @@ trait MyService extends HttpService {
 		parameters('req) { (req) =>
 		    onComplete(test.readFutureTimeFilterComments("commentsalltime", req, 6000, 0)) {
 		    	      case Success(value) => respondWithMediaType(`text/html`) {
-		    	        complete(value.reduce((t,i)=> t:::i)
-		    	            .sortBy(- _.like_count)
-		    	            .map(t=>(t.created_time+" "+t.from+"("+t.like_count+"): "+t.message))
-		    	            .mkString("<hr>"))
+		    	        complete{
+		    	        	GetCommentsTopic.getCommentsUlrs(value)
+		    	        	GetCommentsTopic.getCommentsHTML(value)
+		    	        }
 		    	      }
 		    	      case Failure(ex)    => {
 		    	        ex.printStackTrace()

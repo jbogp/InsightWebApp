@@ -1,4 +1,4 @@
-package main.scala.hbase
+package com.example
 
 import org.apache.hadoop.hbase.client.HTable
 import org.apache.hadoop.hbase.client.HBaseAdmin
@@ -17,6 +17,10 @@ import scala.concurrent._
 import ExecutionContext.Implicits.global
 import org.apache.hadoop.hbase.CellUtil
 import org.apache.hadoop.hbase.client.HConnectionManager
+
+case class Comment(created_time:String,from:String,like_count:Int,message:String)
+
+case class ListOfComments(comments:List[Comment],url:String)
 
 
 class ReadFromHbase {
@@ -55,7 +59,7 @@ class ReadFromHbase {
 		ret		
 	}
 	
-	case class Comment(created_time:String,from:String,like_count:Int,message:String)
+
 	
 	
 	
@@ -78,9 +82,10 @@ class ReadFromHbase {
 	}
  
 	
-	def readFutureTimeFilterComments(table:String,column:String,minutesBackMax:Int,minutesBackMin:Int):Future[ArrayBuffer[List[Comment]]] = Future {
+	def readFutureTimeFilterComments(table:String,column:String,minutesBackMax:Int,minutesBackMin:Int):Future[ArrayBuffer[ListOfComments]] = Future {
 		/*function to handle meta link results*/
-		def handleRow(next:Result):List[Comment] = {
+		def handleRow(next:Result):ListOfComments = {
+			/*getting comments*/
 			val jsonString = {
 			  val col = next.getColumnLatestCell("infos".getBytes(), column.getBytes())
 			  val value = CellUtil.cloneValue(col)
@@ -91,10 +96,18 @@ class ReadFromHbase {
 			}
 			
 			val json = parse(jsonString)
-			json.extract[List[Comment]]
+			val list = new ListOfComments(json.extract[List[Comment]],{
+			  val col = next.getColumnLatestCell("infos".getBytes(), "theArticleLink".getBytes())
+			  val value = CellUtil.cloneValue(col)
+			  if(value.length != 0)
+				  new String(value)
+			  else
+				  "URL not found"
+			})
+			list
 		}
 		/*Calling the database*/
-		readTimeFilterGeneric[List[Comment]](table, minutesBackMax, minutesBackMin, handleRow,column)
+		readTimeFilterGeneric[ListOfComments](table, minutesBackMax, minutesBackMin, handleRow,column)
 	}
 
 }

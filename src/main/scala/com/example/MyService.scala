@@ -69,8 +69,7 @@ trait MyService extends HttpService {
 			    	      case Success(value) => respondWithMediaType(`text/html`) {
 			    	        complete{
 			    	        	value.map(topic=>{
-			    	        		val top = topic
-			    	        		"<a href='/comments?req="+top+">"+top+"</a>"
+			    	        		"<a href='/comments?req="+topic+"'>"+topic+"</a>"
 			    	        	}).mkString("<hr>")
 			    	        	
 			    	        }

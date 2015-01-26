@@ -16,6 +16,7 @@ import org.apache.hadoop.hbase.HBaseConfiguration
 import scala.concurrent._
 import ExecutionContext.Implicits.global
 import org.apache.hadoop.hbase.CellUtil
+import org.apache.hadoop.hbase.client.HConnectionManager
 
 
 class ReadFromHbase {
@@ -26,13 +27,13 @@ class ReadFromHbase {
     config.set("hbase.zookeeper.quorum", "ip-172-31-11-73.us-west-1.compute.internal");
     config.set("hbase.zookeeper.property.clientPort","2181");
     config.set("hbase.master", "ip-172-31-11-73.us-west-1.compute.internal:60000");
-	val admin = new HBaseAdmin(config)
 	implicit val formats = Serialization.formats(NoTypeHints)
 	
 	/*Generic Hbase reader to fetch all the rows of a table beetween 2 times and create objects out of that*/
 	def readTimeFilterGeneric[T](table:String,minutesBackMax:Int,minutesBackMin:Int,handleRow:Result=>T,column:String):ArrayBuffer[T] = {
 		/*Fetch the table*/
-		val conn = admin.getConnection()
+	  
+		val conn = HConnectionManager.createConnection(config)
 		val httable = conn.getTable(table)
 		
 		val offsetMax:Long = minutesBackMax*60000L

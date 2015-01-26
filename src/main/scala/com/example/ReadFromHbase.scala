@@ -94,7 +94,7 @@ class ReadFromHbase {
 				  new String(value)
 			  }
 			  else
-				  "empty"
+				  """[{"created_time":"never","from":"noone","like_count":0,"message":"nothing"}]"""
 			}
 			
 			val json = parse(jsonString)

@@ -22,15 +22,17 @@ class MyServiceActor extends Actor with MyService {
 	// connects the services environment to the enclosing actor or test
 	def actorRefFactory = context
 
-			// this actor only runs our route, but you could add
-			// other things here, like request stream processing
-			// or timeout handling
-			def receive = runRoute(myRoute)
+	// this actor only runs our route, but you could add
+	// other things here, like request stream processing
+	// or timeout handling
+	def receive = runRoute(myRoute)
 }
 
 
 // this trait defines our service behavior independently from the service actor
 trait MyService extends HttpService {
+  
+  
 
 	def stringMarshaller(charset: HttpCharset, more: HttpCharset*): Marshaller[String] =
 			stringMarshaller(ContentType(`text/plain`, charset), more map (ContentType(`text/plain`, _)): _*)

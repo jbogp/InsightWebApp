@@ -98,9 +98,10 @@ class ReadFromHbase {
 			val json = parse(jsonString)
 			val list = new ListOfComments(json.extract[List[Comment]],{
 			  val col = next.getColumnLatestCell("infos".getBytes(), "theArticleLink".getBytes())
-			  val value = CellUtil.cloneValue(col)
-			  if(value.length != 0)
+			  if(col != null){
+				  val value = CellUtil.cloneValue(col)
 				  new String(value)
+			  }
 			  else
 				  "URL not found"
 			})

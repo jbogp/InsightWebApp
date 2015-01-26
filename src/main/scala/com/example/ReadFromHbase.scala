@@ -18,7 +18,7 @@ import ExecutionContext.Implicits.global
 import org.apache.hadoop.hbase.CellUtil
 import org.apache.hadoop.hbase.client.HConnectionManager
 
-case class Comment(created_time:String,from:String,like_count:Int,message:String,url:String)
+case class Comment(created_time:String,from:String,like_count:Int,message:String,url:Option[String])
 
 
 

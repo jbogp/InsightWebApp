@@ -42,50 +42,13 @@ trait MyService extends HttpService {
   
 
   val myRoute =
+    parameters('req) { (req) =>
+          complete(s"The color is '$req' and the background ")
+  }~
     path("chris") {
       get {
         val test = new ReadFromHbase
         val test2 = test.readTimeFilterComments("commentsalltime", "chris", 6000, 0)
-        
-        respondWithMediaType(`text/html`) { // XML is marshalled to `text/xml` by default, so we simply override here
-          complete(test2.reduce((t,i)=> t:::i).map(t=>(t.message)).filter(p=>p != "nothing").mkString("<hr>"))
-        }
-      }
-    }~
-          path("king1h") {
-      get {
-        val test = new ReadFromHbase
-        val test2 = test.readTimeFilterComments("comments1h", "king", 60, 0)
-        
-        respondWithMediaType(`text/html`) { // XML is marshalled to `text/xml` by default, so we simply override here
-          complete(test2.reduce((t,i)=> t:::i).map(t=>(t.message)).filter(p=>p != "nothing").mkString("<hr>"))
-        }
-      }
-    }~
-      path("king12h") {
-      get {
-        val test = new ReadFromHbase
-        val test2 = test.readTimeFilterComments("comments12h", "king", 600, 0)
-        
-        respondWithMediaType(`text/html`) { // XML is marshalled to `text/xml` by default, so we simply override here
-          complete(test2.reduce((t,i)=> t:::i).map(t=>(t.message)).filter(p=>p != "nothing").mkString("<hr>"))
-        }
-      }
-    }~
-      path("king") {
-      get {
-        val test = new ReadFromHbase
-        val test2 = test.readTimeFilterComments("commentsalltime", "king", 6000, 0)
-        
-        respondWithMediaType(`text/html`) { // XML is marshalled to `text/xml` by default, so we simply override here
-          complete(test2.reduce((t,i)=> t:::i).map(t=>(t.message)).filter(p=>p != "nothing").mkString("<hr>"))
-        }
-      }
-    }~
-     path("isis") {
-      get {
-        val test = new ReadFromHbase
-        val test2 = test.readTimeFilterComments("commentsalltime", "isis", 6000, 0)
         
         respondWithMediaType(`text/html`) { // XML is marshalled to `text/xml` by default, so we simply override here
           complete(test2.reduce((t,i)=> t:::i).map(t=>(t.message)).filter(p=>p != "nothing").mkString("<hr>"))

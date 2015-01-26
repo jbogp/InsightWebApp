@@ -44,8 +44,8 @@ trait MyService extends HttpService {
 
 			val myRoute =
 			parameters('req) { (req) =>
-			val test2 = test.readTimeFilterComments("commentsalltime", req, 600, 0)
-			complete(test2.reduce((t,i)=> t:::i).map(t=>(t.message)).filter(p=>p != "nothing").mkString("<hr>"))
+			val test2 = test.readTimeFilterComments("commentsalltime", req, 6000, 0)
+			complete(test2.reduce((t,i)=> t:::i).map(t=>(t.message)).mkString("<hr>"))
 	}~
 	path("chris") {
 		get {

@@ -13,6 +13,8 @@ import net.liftweb.json._
 import org.apache.hadoop.hbase.client.Result
 import org.apache.hadoop.fs.viewfs.Constants
 import org.apache.hadoop.hbase.HBaseConfiguration
+import scala.concurrent._
+import ExecutionContext.Implicits.global
 
 
 class ReadFromHbase {
@@ -49,7 +51,8 @@ class ReadFromHbase {
 	case class Comment(created_time:String,from:String,like_count:Int,message:String)
 	
 	
-	def readTrendsComments(table:String,column:String):ArrayBuffer[String] =  {
+	
+	def readFutureTrendsComments(table:String,column:String):Future[ArrayBuffer[String]] =  Future{
 		/*function to handle meta link results*/
 		def handleRow(next:Result):String = {
 			val jsonString = {
@@ -68,7 +71,7 @@ class ReadFromHbase {
 	}
  
 	
-	def readTimeFilterComments(table:String,column:String,minutesBackMax:Int,minutesBackMin:Int):ArrayBuffer[List[Comment]] =  {
+	def readFutureTimeFilterComments(table:String,column:String,minutesBackMax:Int,minutesBackMin:Int):Future[ArrayBuffer[List[Comment]]] = Future {
 		/*function to handle meta link results*/
 		def handleRow(next:Result):List[Comment] = {
 			val jsonString = {

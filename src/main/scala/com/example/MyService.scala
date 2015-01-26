@@ -6,6 +6,10 @@ import spray.http._
 import MediaTypes._
 import main.scala.hbase.ReadFromHbase
 import spray.httpx.marshalling.Marshaller
+import scala.concurrent._
+import ExecutionContext.Implicits.global
+import scala.util.Success
+import scala.util.Failure
 
 
 
@@ -42,47 +46,12 @@ trait MyService extends HttpService {
 	val test = new ReadFromHbase
 
 
-			val myRoute =
-			parameters('req) { (req) =>
-			val test2 = test.readTimeFilterComments("commentsalltime", req, 6000, 0)
-			complete(test2.reduce((t,i)=> t:::i).map(t=>(t.message)).mkString("<hr>"))
-	}~
-	path("chris") {
-		get {
-
-			val test2 = test.readTimeFilterComments("commentsalltime", "chris", 6000, 0)
-
-			respondWithMediaType(`text/html`) { // XML is marshalled to `text/xml` by default, so we simply override here
-			complete(test2.reduce((t,i)=> t:::i).map(t=>(t.message)).filter(p=>p != "nothing").mkString("<hr>"))
-			}
+	val myRoute =
+		parameters('req) { (req) =>
+		    onComplete(test.readFutureTimeFilterComments("commentsalltime", req, 6000, 0)) {
+		    	      case Success(value) => complete(value.reduce((t,i)=> t:::i).map(t=>(t.message)).mkString("<hr>"))
+		    	      case Failure(ex)    => complete(s"An error occurred: ${ex.getMessage}")
+		    }
 		}
-	}~
-	path("topics1h") {
-		get {
-			val test2 = test.readTrendsComments("topics1h", "val")
-
-			respondWithMediaType(`text/html`) { // XML is marshalled to `text/xml` by default, so we simply override here
-			complete(test2.mkString("<hr>"))
-			}
-		}
-	}~   
-	path("topics12h") {
-		get {
-			val test2 = test.readTrendsComments("topics12h", "val")
-
-			respondWithMediaType(`text/html`) { // XML is marshalled to `text/xml` by default, so we simply override here
-			complete(test2.mkString("<hr>"))
-			}
-		}
-	}~
-	path("topicsalltime") {
-		get {
-			val test2 = test.readTrendsComments("topicsalltime", "val")
-
-			respondWithMediaType(`text/html`) { // XML is marshalled to `text/xml` by default, so we simply override here
-			complete(test2.mkString("<hr>"))
-			}
-		}
-	}
 
 }

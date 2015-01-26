@@ -52,7 +52,7 @@ trait MyService extends HttpService {
 		parameters('req) { (req) =>
 		    onComplete(test.readFutureTimeFilterComments("commentsalltime", req, 6000, 0)) {
 		    	      case Success(value) => respondWithMediaType(`text/html`) {
-		    	        complete(value.reduce((t,i)=> t:::i).map(t=>(t.message)).mkString("<hr>"))
+		    	        complete(value.reduce((t,i)=> t:::i).map(t=>(t.created_time+" "+t.from+"("+t.like_count+"): "+t.message)).mkString("<hr>"))
 		    	      }
 		    	      case Failure(ex)    => {
 		    	        ex.printStackTrace()

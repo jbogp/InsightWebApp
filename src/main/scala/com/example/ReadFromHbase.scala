@@ -18,9 +18,8 @@ import ExecutionContext.Implicits.global
 import org.apache.hadoop.hbase.CellUtil
 import org.apache.hadoop.hbase.client.HConnectionManager
 
-case class Comment(created_time:String,from:String,like_count:Int,message:String)
-case class CommentExtended(created_time:String,from:String,like_count:Int,message:String,url:String)
-case class ListOfComments(comments:List[Comment],url:String)
+case class Comment(created_time:String,from:String,like_count:Int,message:String,url:String)
+
 
 
 class ReadFromHbase {
@@ -45,7 +44,7 @@ class ReadFromHbase {
 		
 		
 
-		val theScan = new Scan().addColumn("infos".getBytes(),column.getBytes()).addColumn("infos".getBytes(),"theArticleLink".getBytes()).setTimeRange(Calendar.getInstance().getTimeInMillis()-offsetMax, Calendar.getInstance().getTimeInMillis()-offsetMin);
+		val theScan = new Scan().addColumn("infos".getBytes(),column.getBytes()).setTimeRange(Calendar.getInstance().getTimeInMillis()-offsetMax, Calendar.getInstance().getTimeInMillis()-offsetMin);
 		
 		
 		/*Adding timestamp filter*/
@@ -83,9 +82,9 @@ class ReadFromHbase {
 	}
  
 	
-	def readFutureTimeFilterComments(table:String,column:String,minutesBackMax:Int,minutesBackMin:Int):Future[ArrayBuffer[ListOfComments]] = Future {
+	def readFutureTimeFilterComments(table:String,column:String,minutesBackMax:Int,minutesBackMin:Int):Future[ArrayBuffer[List[Comment]]] = Future {
 		/*function to handle meta link results*/
-		def handleRow(next:Result):ListOfComments = {
+		def handleRow(next:Result):List[Comment] = {
 			/*getting comments*/
 			val jsonString = {
 			  val col = next.getColumnLatestCell("infos".getBytes(), column.getBytes())
@@ -94,23 +93,14 @@ class ReadFromHbase {
 				  new String(value)
 			  }
 			  else
-				  """[{"created_time":"never","from":"noone","like_count":0,"message":"nothing"}]"""
+				  """[{"created_time":"never","from":"noone","like_count":0,"message":"nothing","url":"none"}]"""
 			}
 			
 			val json = parse(jsonString)
-			val list = new ListOfComments(json.extract[List[Comment]],{
-			  val col = next.getColumnLatestCell("infos".getBytes(), "theArticleLink".getBytes())
-			  if(col != null){
-				  val value = CellUtil.cloneValue(col)
-				  new String(value)
-			  }
-			  else
-				  "URL not found"
-			})
-			list
+			json.extract[List[Comment]]
 		}
 		/*Calling the database*/
-		readTimeFilterGeneric[ListOfComments](table, minutesBackMax, minutesBackMin, handleRow,column)
+		readTimeFilterGeneric[List[Comment]](table, minutesBackMax, minutesBackMin, handleRow,column)
 	}
 
 }

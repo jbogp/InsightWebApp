@@ -48,18 +48,35 @@ trait MyService extends HttpService {
 
 
 	val myRoute =
-		parameters('req) { (req) =>
-		    onComplete(test.readFutureTimeFilterComments("commentsalltime", req, 6000, 0)) {
-		    	      case Success(value) => respondWithMediaType(`text/html`) {
-		    	        complete{
-		    	        	GetCommentsTopic.getCommentsHTML(value)
-		    	        }
-		    	      }
-		    	      case Failure(ex)    => {
-		    	        ex.printStackTrace()
-		    	        complete(s"An error occurred: ${ex.getStackTrace()}")
-		    	      }
-		    }
+		path("comments"){
+			parameters('req) { (req) =>
+			    onComplete(test.readFutureTimeFilterComments("commentsalltime", req, 6000, 0)) {
+			    	      case Success(value) => respondWithMediaType(`text/html`) {
+			    	        complete{
+			    	        	GetCommentsTopic.getCommentsHTML(value)
+			    	        }
+			    	      }
+			    	      case Failure(ex)    => {
+			    	        ex.printStackTrace()
+			    	        complete(s"An error occurred: ${ex.getStackTrace()}")
+			    	      }
+			    }
+			}
+		}
+		path("topics"){
+			parameters('req) { (req) =>
+			    onComplete(test.readFutureTrendsComments(req,"val")) {
+			    	      case Success(value) => respondWithMediaType(`text/html`) {
+			    	        complete{
+			    	        	value.mkString("<hr>")
+			    	        }
+			    	      }
+			    	      case Failure(ex)    => {
+			    	        ex.printStackTrace()
+			    	        complete(s"An error occurred: ${ex.getStackTrace()}")
+			    	      }
+			    }
+			}
 		}
 
 }

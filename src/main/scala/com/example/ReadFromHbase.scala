@@ -89,9 +89,10 @@ class ReadFromHbase {
 			/*getting comments*/
 			val jsonString = {
 			  val col = next.getColumnLatestCell("infos".getBytes(), column.getBytes())
-			  val value = CellUtil.cloneValue(col)
-			  if(value.length != 0)
+			  if(col != null){
+				  val value = CellUtil.cloneValue(col)
 				  new String(value)
+			  }
 			  else
 				  "empty"
 			}

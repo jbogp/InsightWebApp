@@ -48,6 +48,18 @@ trait MyService extends HttpService {
 
 
 	val myRoute =
+	  	path(""){
+			complete {
+				<html>
+					<body>
+						<div width="90%">
+							<div width="50%" style="align:center;display:inline"><a href="s"></a></div>
+							<div width="50%" style="align:center;display:inline"></div>
+						</div>
+					</body>
+				</html>
+			}
+		}~
 		path("comments"){
 			parameters('req) { (req) =>
 			    onComplete(test.readFutureTimeFilterComments("commentsalltime", req, 6000, 0)) {

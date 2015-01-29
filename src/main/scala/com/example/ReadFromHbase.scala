@@ -110,7 +110,7 @@ class ReadFromHbase {
 		def handleRow(next:Result):Tweet = {
 			/*getting comments*/
 			val jsonString = {
-			  val col = next.getColumnLatestCell("infos".getBytes(), ("theTweets_"+column).getBytes())
+			  val col = next.getColumnLatestCell("infos".getBytes(), column.getBytes())
 			  val value = CellUtil.cloneValue(col)
 			  new String(value)
 			}

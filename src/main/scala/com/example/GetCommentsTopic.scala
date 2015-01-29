@@ -45,9 +45,13 @@ object GetCommentsTopic {
 			.reduce((t,i)=> t:::i)
 			.sortBy(- _.like_count)
 			
-		write(json)
-			
-			
+		write(json)		
+	}
+  	
+   	def getTweetsJson(value:ArrayBuffer[Tweet]):String = {
+		val json = value
+			.sortBy(- _.createdAt)
+		write(json)		
 	}
 	
 

@@ -19,6 +19,8 @@ import org.apache.hadoop.hbase.CellUtil
 import org.apache.hadoop.hbase.client.HConnectionManager
 
 case class Comment(created_time:String,from:String,like_count:Int,message:String,url:Option[String])
+/*Case class for Tweet Message*/
+case class Tweet(message:String,createdAt:Long,latitude:Double,longitude:Double,id:Long,rt_count:Int,from:String,from_pic:String,from_url:String)
 
 
 
@@ -93,7 +95,7 @@ class ReadFromHbase {
 				  new String(value)
 			  }
 			  else
-				  """[{"created_time":"never","from":"noone","like_count":0,"message":"nothing","url":"none"}]"""
+				  """[{"message":"noth""created_time":"never","from":"noone","like_count":0,"message":"nothing","url":"none"}]"""
 			}
 			
 			val json = parse(jsonString)
@@ -101,6 +103,23 @@ class ReadFromHbase {
 		}
 		/*Calling the database*/
 		readTimeFilterGeneric[List[Comment]](table, minutesBackMax, minutesBackMin, handleRow,column)
+	}
+	
+	def readFutureTimeFilterTweets(table:String,column:String,minutesBackMax:Int,minutesBackMin:Int):Future[ArrayBuffer[Tweet]] = Future {
+		/*function to handle meta link results*/
+		def handleRow(next:Result):Tweet = {
+			/*getting comments*/
+			val jsonString = {
+			  val col = next.getColumnLatestCell("infos".getBytes(), ("theTweets_"+column).getBytes())
+			  val value = CellUtil.cloneValue(col)
+			  new String(value)
+			}
+			
+			val json = parse(jsonString)
+			json.extract[Tweet]
+		}
+		/*Calling the database*/
+		readTimeFilterGeneric[Tweet](table, minutesBackMax, minutesBackMin, handleRow,column)
 	}
 
 }

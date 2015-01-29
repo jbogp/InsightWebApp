@@ -71,6 +71,20 @@ Nothing to see here
 			    }
 			}
 		}~
+		path("tweets"){
+			parameters('req) { (req) =>
+			    onComplete(test.readFutureTimeFilterTweets("commentsalltime", req, 600, 0)) {
+			    	      case Success(value) => respondWithMediaType(`application/json`) {
+			    	        complete{
+			    	        	GetCommentsTopic.getTweetsJson(value)
+			    	        }
+			    	      }
+			    	      case Failure(ex)    => respondWithMediaType(`application/json`){
+			    	        complete("""{"error":"no comments on this topic"}""")
+			    	      }
+			    }
+			}
+		}~
 		path("topics"){
 			parameters('req) { (req) =>
     	        complete{

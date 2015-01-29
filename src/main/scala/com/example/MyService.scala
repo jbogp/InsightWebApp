@@ -59,7 +59,7 @@ Nothing to see here
 		}~
 		path("comments"){
 			parameters('req) { (req) =>
-			    onComplete(test.readFutureTimeFilterComments("commentsalltime", req, 6000, 0)) {
+			    onComplete(test.readFutureTimeFilterComments("commentsalltime", req, 600, 0)) {
 			    	      case Success(value) => respondWithMediaType(`application/json`) {
 			    	        complete{
 			    	        	GetCommentsTopic.getCommentsJson(value)

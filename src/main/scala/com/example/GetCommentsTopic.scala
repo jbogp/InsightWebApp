@@ -34,7 +34,7 @@ object GetCommentsTopic {
 			ret.append(topics.getString("topic"))
 		}
 		
-		write(ret.toList)
+		write(ret.toList.reverse)
 		
 		
 			

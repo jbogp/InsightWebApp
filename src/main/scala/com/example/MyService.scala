@@ -80,6 +80,7 @@ Nothing to see here
 			    	        }
 			    	      }
 			    	      case Failure(ex)    => respondWithMediaType(`application/json`){
+			    	    	  ex.printStackTrace()
 			    	        complete("""{"error":"no comments on this topic"}""")
 			    	      }
 			    }

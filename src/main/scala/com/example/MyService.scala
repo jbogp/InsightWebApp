@@ -52,10 +52,7 @@ trait MyService extends HttpService {
 			complete {
 				<html>
 					<body>
-						<div width="90%">
-							<div width="50%" style="align:center;display:inline"><a href="s"></a></div>
-							<div width="50%" style="align:center;display:inline"></div>
-						</div>
+Nothing to see here
 					</body>
 				</html>
 			}
@@ -63,34 +60,22 @@ trait MyService extends HttpService {
 		path("comments"){
 			parameters('req) { (req) =>
 			    onComplete(test.readFutureTimeFilterComments("commentsalltime", req, 6000, 0)) {
-			    	      case Success(value) => respondWithMediaType(`text/html`) {
+			    	      case Success(value) => respondWithMediaType(`application/json`) {
 			    	        complete{
-			    	        	GetCommentsTopic.getCommentsHTML(value)
+			    	        	GetCommentsTopic.getCommentsJson(value)
 			    	        }
 			    	      }
-			    	      case Failure(ex)    => {
-			    	        ex.printStackTrace()
-			    	        complete(s"An error occurred: ${ex.getStackTrace()}")
+			    	      case Failure(ex)    => respondWithMediaType(`application/json`){
+			    	        complete("""{"error":"no comments on this topic"}""")
 			    	      }
 			    }
 			}
 		}~
 		path("topics"){
 			parameters('req) { (req) =>
-			    onComplete(test.readFutureTrendsComments(req,"val")) {
-			    	      case Success(value) => respondWithMediaType(`text/html`) {
-			    	        complete{
-			    	        	value.map(topic=>{
-			    	        		"<a href='/comments?req="+topic+"'>"+topic+"</a>"
-			    	        	}).mkString("<hr>")
-			    	        	
-			    	        }
-			    	      }
-			    	      case Failure(ex)    => {
-			    	        ex.printStackTrace()
-			    	        complete(s"An error occurred: ${ex.getStackTrace()}")
-			    	      }
-			    }
+    	        complete{
+    	        	GetCommentsTopic.getTopicsJson(req)
+    	        }
 			}
 		}
 

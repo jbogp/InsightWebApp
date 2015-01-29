@@ -33,7 +33,8 @@ libraryDependencies ++= {
     "org.apache.hadoop" % "hadoop-core" % "2.5.0-mr1-cdh5.3.0",
     "org.apache.hadoop" % "hadoop-common" % "2.5.0-cdh5.3.0",
     "org.apache.hadoop" % "hadoop-client" % "2.5.0-mr1-cdh5.3.0",
-    "net.liftweb" % "lift-json-ext_2.10" % "2.5.1"
+    "net.liftweb" % "lift-json-ext_2.10" % "2.5.1",
+    "mysql" % "mysql-connector-java" % "5.1.34"
   )
 }
 

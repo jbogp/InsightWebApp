@@ -9,6 +9,7 @@ import scala.concurrent._
 import ExecutionContext.Implicits.global
 import scala.util.Success
 import scala.util.Failure
+import spray.http.HttpHeaders.RawHeader
 
 
 
@@ -58,21 +59,22 @@ Nothing to see here
 			}
 		}~
 		path("comments"){
-			parameters('req) { (req) =>
+			parameters('req) { (req) => respondWithHeader(RawHeader("Access-Control-Allow-Origin", "*")){
 			    onComplete(test.readFutureTimeFilterComments("commentsalltime", req, 6000, 0)) {
 			    	      case Success(value) => respondWithMediaType(`application/json`) {
-			    	        complete{
-			    	        	GetCommentsTopic.getCommentsJson(value)
-			    	        }
+								complete{
+									GetCommentsTopic.getCommentsJson(value)
+								}
 			    	      }
 			    	      case Failure(ex)    => respondWithMediaType(`application/json`){
 			    	        complete("""{"error":"no comments on this topic"}""")
 			    	      }
 			    }
 			}
+			}
 		}~
 		path("tweets"){
-			parameters('req) { (req) =>
+			parameters('req) { (req) => respondWithHeader(RawHeader("Access-Control-Allow-Origin", "*")){
 			    onComplete(test.readFutureTimeFilterTweets("commentsalltime", "theTweets_"+req, 60, 0)) {
 			    	      case Success(value) => respondWithMediaType(`application/json`) {
 			    	        complete{
@@ -85,13 +87,14 @@ Nothing to see here
 			    	      }
 			    }
 			}
+			}
 		}~
 		path("topics"){
-			parameters('req) { (req) =>
+			parameters('req) { (req) =>respondWithHeader(RawHeader("Access-Control-Allow-Origin", "*")){
     	        complete{
     	        	GetCommentsTopic.getTopicsJson(req)
     	        }
-			}
+			}}
 		}
 
 }

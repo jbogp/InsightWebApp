@@ -24,7 +24,7 @@ case class Tweet(message:String,createdAt:Long,latitude:Double,longitude:Double,
 
 
 
-class ReadFromHbase {
+object ReadFromHbase {
   
   	/*Creating configuration and connecting*/
 	val config = HBaseConfiguration.create()
@@ -34,13 +34,14 @@ class ReadFromHbase {
     config.set("hbase.master", "ip-172-31-11-73.us-west-1.compute.internal:60000");
 	implicit val formats = Serialization.formats(NoTypeHints)
 	
+	val conn = HConnectionManager.createConnection(config)
+		
+	
 	/*Generic Hbase reader to fetch all the rows of a table beetween 2 times and create objects out of that*/
 	def readTimeFilterGeneric[T](table:String,minutesBackMax:Int,minutesBackMin:Int,handleRow:Result=>T,column:String):ArrayBuffer[T] = {
 		/*Fetch the table*/
 	  
-		val conn = HConnectionManager.createConnection(config)
 		val httable = conn.getTable(table)
-		
 		val offsetMax:Long = minutesBackMax*60000L
 		val offsetMin:Long = minutesBackMin*60000L
 		

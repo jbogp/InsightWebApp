@@ -45,7 +45,6 @@ trait MyService extends HttpService {
 		Marshaller.of[String](contentType +: more: _*) { (value, contentType, ctx) ⇒
 		ctx.marshalTo(HttpEntity(contentType, value))
 	}
-	val test = new ReadFromHbase
 
 
 	val myRoute =
@@ -60,7 +59,7 @@ Nothing to see here
 		}~
 		path("comments"){
 			parameters('req) { (req) => respondWithHeader(RawHeader("Access-Control-Allow-Origin", "*")){
-			    onComplete(test.readFutureTimeFilterComments("commentsalltime", req, 600, 0)) {
+			    onComplete(ReadFromHbase.readFutureTimeFilterComments("commentsalltime", req, 600, 0)) {
 			    	      case Success(value) => respondWithMediaType(`application/json`) {
 								complete{
 									GetCommentsTopic.getCommentsJson(value)
@@ -75,7 +74,7 @@ Nothing to see here
 		}~
 		path("tweets"){
 			parameters('req) { (req) => respondWithHeader(RawHeader("Access-Control-Allow-Origin", "*")){
-			    onComplete(test.readFutureTimeFilterTweets("commentsalltime", "theTweets_"+req, 60, 0)) {
+			    onComplete(ReadFromHbase.readFutureTimeFilterTweets("commentsalltime", "theTweets_"+req, 60, 0)) {
 			    	      case Success(value) => respondWithMediaType(`application/json`) {
 			    	        complete{
 			    	        	GetCommentsTopic.getTweetsJson(value)

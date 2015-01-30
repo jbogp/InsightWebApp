@@ -61,6 +61,7 @@ object GetCommentsTopic {
 				case Some(_) => t.created_time+" "+t.from+"("+t.like_count+"): "+t.message+" <a href='"+t.url.get+"'>link</a>"
 				case _ => t.created_time+" "+t.from+"("+t.like_count+"): "+t.message
 			})
+			.distinct
 			.mkString("<hr>")
 	}
   

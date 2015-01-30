@@ -60,7 +60,7 @@ Nothing to see here
 		}~
 		path("comments"){
 			parameters('req) { (req) => respondWithHeader(RawHeader("Access-Control-Allow-Origin", "*")){
-			    onComplete(test.readFutureTimeFilterComments("commentsalltime", req, 60, 0)) {
+			    onComplete(test.readFutureTimeFilterComments("commentsalltime", req, 600, 0)) {
 			    	      case Success(value) => respondWithMediaType(`application/json`) {
 								complete{
 									GetCommentsTopic.getCommentsJson(value)

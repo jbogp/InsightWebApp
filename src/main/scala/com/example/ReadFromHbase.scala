@@ -46,7 +46,12 @@ class ReadFromHbase {
 		
 		
 
-		val theScan = new Scan().addColumn("infos".getBytes(),column.getBytes()).setTimeRange(Calendar.getInstance().getTimeInMillis()-offsetMax, Calendar.getInstance().getTimeInMillis()-offsetMin);
+		val theScan = new Scan()
+			.addColumn("infos".getBytes(),column.getBytes())
+			
+		theScan.setMaxResultsPerColumnFamily(100)
+		theScan.setReversed(true)
+			
 		
 		
 		/*Adding timestamp filter*/

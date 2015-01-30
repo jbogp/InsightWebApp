@@ -50,7 +50,7 @@ class ReadFromHbase {
 			.addColumn("infos".getBytes(),column.getBytes())
 			
 		theScan.setMaxResultsPerColumnFamily(100)
-		theScan.setReversed(true)
+		
 			
 		
 		

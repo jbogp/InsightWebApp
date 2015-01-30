@@ -35,8 +35,6 @@ object GetCommentsTopic {
 		}
 		
 		write(ret.toList.reverse)
-		
-		
 			
 	}
 	

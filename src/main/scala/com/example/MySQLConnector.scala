@@ -3,6 +3,8 @@ package com.example
 import java.sql.DriverManager
 import java.sql.Connection
 import com.typesafe.config.ConfigFactory
+import scala.collection.mutable.ArrayBuffer
+import java.sql.ResultSet
 
 object MySQLConnector {
   
@@ -21,6 +23,8 @@ object MySQLConnector {
 	// make the connection
 	Class.forName(driver)
 	val connection = DriverManager.getConnection(url, confmysql._1, confmysql._2)
+	
+
 	
 	def getLastTimestamp():Long  ={
 	  

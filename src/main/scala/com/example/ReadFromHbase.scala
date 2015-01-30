@@ -47,7 +47,7 @@ class ReadFromHbase {
 		
 
 		val theScan = new Scan()
-			.addColumn("infos".getBytes(),column.getBytes())
+			.addColumn("infos".getBytes(),column.getBytes()).setReversed(true)
 			
 		theScan.setMaxResultsPerColumnFamily(100)
 		

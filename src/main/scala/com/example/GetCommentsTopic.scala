@@ -41,6 +41,7 @@ object GetCommentsTopic {
   	def getCommentsJson(value:ArrayBuffer[List[Comment]]):String = {
 		val json = value
 			.reduce((t,i)=> t:::i)
+			.distinct
 			.sortBy(- _.like_count)
 			
 		write(json)		

@@ -48,9 +48,8 @@ class ReadFromHbase {
 
 		val theScan = new Scan()
 			.addColumn("infos".getBytes(),column.getBytes())
+			.setTimeRange(Calendar.getInstance().getTimeInMillis()-offsetMax, Calendar.getInstance().getTimeInMillis()-offsetMin)
 			
-		theScan.setMaxResultsPerColumnFamily(10)
-		
 			
 		
 		
@@ -61,8 +60,7 @@ class ReadFromHbase {
 		val ret = new ArrayBuffer[T]
 		while(iterator.hasNext()) {
 			val next = iterator.next()
-			ret.append(handleRow(next))	
-			println("un truc")
+			ret.append(handleRow(next))		
 		}
 		ret		
 	}

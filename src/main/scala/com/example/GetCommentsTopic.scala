@@ -7,7 +7,7 @@ import net.liftweb.json.Serialization.{read, write}
 import java.sql.DriverManager
 import java.sql.Connection
 import java.sql.ResultSet
-
+import collection.breakOut
 
 object GetCommentsTopic {
  
@@ -41,8 +41,8 @@ object GetCommentsTopic {
   	def getCommentsJson(value:ArrayBuffer[List[Comment]]):String = {
 		val json = value
 			.reduce((t,i)=> t:::i)
-			.distinct
 			.sortBy(- _.like_count)
+			.groupBy(_.message).map(_._2.head)
 			
 		write(json)		
 	}

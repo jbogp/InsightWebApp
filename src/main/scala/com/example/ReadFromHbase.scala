@@ -49,7 +49,7 @@ class ReadFromHbase {
 		val theScan = new Scan()
 			.addColumn("infos".getBytes(),column.getBytes())
 			
-		theScan.setMaxResultsPerColumnFamily(100)
+		theScan.setMaxResultsPerColumnFamily(10)
 		
 			
 		
@@ -61,7 +61,8 @@ class ReadFromHbase {
 		val ret = new ArrayBuffer[T]
 		while(iterator.hasNext()) {
 			val next = iterator.next()
-			ret.append(handleRow(next))		
+			ret.append(handleRow(next))	
+			println("un truc")
 		}
 		ret		
 	}

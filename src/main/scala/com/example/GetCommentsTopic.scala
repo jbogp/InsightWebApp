@@ -41,7 +41,11 @@ object GetCommentsTopic {
   	def getCommentsJson(value:ArrayBuffer[List[Comment]]):String = {
 		val json = value
 			.reduce((t,i)=> t:::i)
-			.groupBy(_.message).map(_._2.head)
+			//.groupBy(_.message).map(_._2.head)
+			.filterNot{ var set = Set[String]()
+			obj => val b = set(obj.message); set += obj.message; b}
+
+			json.sortBy(_.created_time)
 			
 		write(json)		
 	}

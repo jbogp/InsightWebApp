@@ -19,6 +19,8 @@ import org.apache.hadoop.hbase.CellUtil
 import org.apache.hadoop.hbase.client.HConnectionManager
 
 case class Comment(created_time:String,from:String,like_count:Int,message:String,url:Option[String])
+
+case class Article(url:String,comments:List[Comment])
 /*Case class for Tweet Message*/
 case class Tweet(message:String,createdAt:Long,latitude:Double,longitude:Double,id:Long,rt_count:Int,from:String,from_pic:String,from_url:String)
 
@@ -100,7 +102,7 @@ object ReadFromHbase {
 				  new String(value)
 			  }
 			  else
-				  """[{"message":"noth""created_time":"never","from":"noone","like_count":0,"message":"nothing","url":"none"}]"""
+				  """[{"message":"noth""created_time":"never","from":"noone","like_count":0,"message":"nothing","url":"none","title":"none"}]"""
 			}
 			
 			val json = parse(jsonString)

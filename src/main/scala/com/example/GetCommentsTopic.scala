@@ -50,6 +50,23 @@ object GetCommentsTopic {
 		write(json)		
 	}
   	
+   	def getCommentsJsonByArticle(value:ArrayBuffer[List[Comment]]):String = {
+		val json = value
+			.reduce((t,i)=> t:::i)
+			.groupBy(_.url)
+			.map(group => {
+				group._1 match {
+				  	case Some(s) =>
+				  		new Article(s,group._2)
+				  	case _ =>
+				  		new Article("unknown",group._2)
+				}
+				
+			})
+			
+			write(json)
+	}
+  	
    	def getTweetsJson(value:ArrayBuffer[Tweet]):String = {
 		val json = value
 			.sortBy(- _.createdAt)

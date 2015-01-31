@@ -58,11 +58,16 @@ Nothing to see here
 			}
 		}~
 		path("comments"){
-			parameters('req) { (req) => respondWithHeader(RawHeader("Access-Control-Allow-Origin", "*")){
+			parameters('req,'org) { (req,org) => respondWithHeader(RawHeader("Access-Control-Allow-Origin", "*")){
 			    onComplete(ReadFromHbase.readFutureTimeFilterComments("commentsalltime", req, 6000, 0)) {
 			    	      case Success(value) => respondWithMediaType(`application/json`) {
 								complete{
-									GetCommentsTopic.getCommentsJson(value)
+									org match{
+									  	case "flat" =>
+									  	  GetCommentsTopic.getCommentsJson(value)
+									  	case _ =>
+									  	  GetCommentsTopic.getCommentsJsonByArticle(value)
+									}
 								}
 			    	      }
 			    	      case Failure(ex)    => respondWithMediaType(`application/json`){

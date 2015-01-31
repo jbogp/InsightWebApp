@@ -57,9 +57,9 @@ object GetCommentsTopic {
 			.map(group => {
 				group._1 match {
 				  	case Some(s) =>
-				  		new Article(s,group._2)
+				  		new Article(s,group._2.sortBy(_.created_time))
 				  	case _ =>
-				  		new Article("unknown",group._2)
+				  		new Article("unknown",group._2.sortBy(_.created_time))
 				}
 				
 			})

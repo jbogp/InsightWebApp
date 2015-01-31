@@ -53,7 +53,7 @@ object GetCommentsTopic {
    	def getCommentsJsonByArticle(value:ArrayBuffer[List[Comment]]):String = {
 		val json = value
 			.reduce((t,i)=> t:::i)
-			.groupBy(_.url)
+			.groupBy(_.title)
 			.map(group => {
 				group._1 match {
 				  	case Some(s) =>

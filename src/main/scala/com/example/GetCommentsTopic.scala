@@ -51,17 +51,24 @@ object GetCommentsTopic {
 	}
   	
    	def getCommentsJsonByArticle(value:ArrayBuffer[List[Comment]]):String = {
+   	  	def dist(l:List[Comment]) = {
+   	  	  l.filterNot{ 
+   	  		 var set = Set[String]()
+   	  		obj => val b = set(obj.message); set += obj.message; b
+   	  	  }
+   	  	}
+			
 		val json = value
 			.reduce((t,i)=> t:::i)
 			.groupBy(_.url)
 			.map(group => {
 				(group._1,group._2(0).title) match {
 				  	case (Some(s),Some(t)) =>
-				  		new Article(s,t,group._2.sortBy(_.created_time))
+				  		new Article(s,t,dist(group._2).sortBy(_.created_time))
 				  	case (Some(s),None) =>
-				  		new Article(s,"Did not get this article's title",group._2.sortBy(_.created_time))
+				  		new Article(s,"Did not get this article's title",dist(group._2).sortBy(_.created_time))
 				  	case _ =>
-				  		new Article("unknown","Did not get this article's title",group._2.sortBy(_.created_time))
+				  		new Article("unknown","Did not get this article's title",dist(group._2).sortBy(_.created_time))
 				}
 				
 			})

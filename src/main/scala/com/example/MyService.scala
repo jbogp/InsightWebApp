@@ -79,7 +79,7 @@ Nothing to see here
 		}~
 		path("tweets"){
 			parameters('req) { (req) => respondWithHeader(RawHeader("Access-Control-Allow-Origin", "*")){
-			    onComplete(ReadFromHbase.readFutureTimeFilterTweets("commentsalltime", "theTweets_"+req, 60, 0)) {
+			    onComplete(ReadFromHbase.readFutureTimeFilterTweets("commentsalltime", "theTweets_"+req, 600, 0)) {
 			    	      case Success(value) => respondWithMediaType(`application/json`) {
 			    	        complete{
 			    	        	GetCommentsTopic.getTweetsJson(value)

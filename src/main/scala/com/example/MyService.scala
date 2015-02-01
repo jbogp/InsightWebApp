@@ -85,12 +85,13 @@ Nothing to see here
 					/*How far back should we look?*/
 					val timeBackMin = timestampBack match {
 					  	case Some(l) => {
-					  		new java.util.Date(Calendar.getInstance().getTimeInMillis() - l).getTime().toInt
+					  		(new java.util.Date(Calendar.getInstance().getTimeInMillis() - l).getTime() / 60000).toInt
 					  	}
 					  	case None =>{
 					  		60
 					  	}
 					}
+					println(timeBackMin)
 					
 					//Fetching the data from hbase
 					onComplete(ReadFromHbase.readFutureTimeFilterTweets("commentsalltime", "theTweets_"+req, timeBackMin, 0)) {

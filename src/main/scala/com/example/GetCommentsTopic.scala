@@ -71,7 +71,7 @@ object GetCommentsTopic {
 				
 				/*Extracting the timestamp*/
 				val timestamp = {
-					sorted(1).created_time match{
+					sorted(0).created_time match{
 					  case x if x.length()>19 => formatFB.parse(x).getTime()
 					  case x => formatDQ.parse(x).getTime()
 					}

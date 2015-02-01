@@ -70,7 +70,7 @@ object ReadFromHbase {
 	
 	
 	/*Generic Hbase reader to fetch all the rows of a table beetween 2 times and create objects out of that*/
-	def readTimestampGeneric[T](table:String,msSecondsBackMax:Int,handleRow:Result=>T,column:String):ArrayBuffer[T] = {
+	def readTimestampGeneric[T](table:String,timestampBack:Long,handleRow:Result=>T,column:String):ArrayBuffer[T] = {
 		/*Fetch the table*/
 	  
 		val httable = conn.getTable(table)
@@ -80,7 +80,7 @@ object ReadFromHbase {
 
 		val theScan = new Scan()
 			.addColumn("infos".getBytes(),column.getBytes())
-			.setTimeRange(Calendar.getInstance().getTimeInMillis()-msSecondsBackMax, Calendar.getInstance().getTimeInMillis())
+			.setTimeRange(timestampBack, Calendar.getInstance().getTimeInMillis())
 			
 			
 		
@@ -141,7 +141,7 @@ object ReadFromHbase {
 		readTimeFilterGeneric[List[Comment]](table, minutesBackMax, minutesBackMin, handleRow,column)
 	}
 	
-	def readFutureTimeFilterTweets(table:String,column:String,timestampBack:Int):Future[ArrayBuffer[Tweet]] = Future {
+	def readFutureTimeFilterTweets(table:String,column:String,timestampBack:Long):Future[ArrayBuffer[Tweet]] = Future {
 		/*function to handle meta link results*/
 		def handleRow(next:Result):Tweet = {
 			/*getting comments*/

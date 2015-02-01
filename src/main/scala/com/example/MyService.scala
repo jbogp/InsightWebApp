@@ -10,6 +10,7 @@ import ExecutionContext.Implicits.global
 import scala.util.Success
 import scala.util.Failure
 import spray.http.HttpHeaders.RawHeader
+import java.util.Calendar
 
 
 
@@ -78,8 +79,21 @@ Nothing to see here
 			}
 		}~
 		path("tweets"){
-			parameters('req) { (req) => respondWithHeader(RawHeader("Access-Control-Allow-Origin", "*")){
-			    onComplete(ReadFromHbase.readFutureTimeFilterTweets("commentsalltime", "theTweets_"+req, 600, 0)) {
+			parameters('req, 'timestampBack.as[Long].?) {
+				(req, timestampBack) => respondWithHeader(RawHeader("Access-Control-Allow-Origin", "*")){
+					
+					/*How far back should we look?*/
+					val timeBackMin = timestampBack match {
+					  	case Some(l) => {
+					  		new java.util.Date(Calendar.getInstance().getTimeInMillis() - l).getTime().toInt
+					  	}
+					  	case None =>{
+					  		60
+					  	}
+					}
+					
+					//Fetching the data from hbase
+					onComplete(ReadFromHbase.readFutureTimeFilterTweets("commentsalltime", "theTweets_"+req, timeBackMin, 0)) {
 			    	      case Success(value) => respondWithMediaType(`application/json`) {
 			    	        complete{
 			    	        	GetCommentsTopic.getTweetsJson(value)
@@ -89,7 +103,7 @@ Nothing to see here
 			    	    	  ex.printStackTrace()
 			    	        complete("""{"error":"no comments on this topic"}""")
 			    	      }
-			    }
+					}
 			}
 			}
 		}~

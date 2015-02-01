@@ -8,6 +8,9 @@ import java.sql.DriverManager
 import java.sql.Connection
 import java.sql.ResultSet
 import collection.breakOut
+import java.util.Calendar
+
+case class TweetsResponse(tweets:ArrayBuffer[Tweet],timestamp:Long)
 
 object GetCommentsTopic {
  
@@ -96,13 +99,18 @@ object GetCommentsTopic {
 				
 			})
 			
+			
+			
+			
 			write(json)
 	}
   	
    	def getTweetsJson(value:ArrayBuffer[Tweet]):String = {
-		val json = value
+		val jsonTweets = value
 			.sortBy(- _.createdAt)
-		write(json)		
+		
+		val timestamp = Calendar.getInstance().getTimeInMillis()
+		write(new TweetsResponse(jsonTweets,timestamp))		
 	}
 	
 

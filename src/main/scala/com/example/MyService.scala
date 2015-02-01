@@ -91,7 +91,6 @@ Nothing to see here
 					  		Calendar.getInstance().getTimeInMillis() - (60*60000L)
 					  	}
 					}
-					println(timeBackMin)
 					
 					//Fetching the data from hbase
 					onComplete(ReadFromHbase.readFutureTimeFilterTweets("commentsalltime", "theTweets_"+req, timeBackMin)) {

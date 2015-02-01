@@ -57,18 +57,32 @@ object GetCommentsTopic {
    	  		obj => val b = set(obj.message); set += obj.message; b
    	  	  }
    	  	}
-			
+   	  	/*Formats for the comments, fb and disqus have t differently*/
+   	  	val formatFB = new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
+		val formatDQ = new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+   	  	
+   	  	/*Extracting the urls and title while sorting the comments and grouping them by the article they came from*/
 		val json = value
 			.reduce((t,i)=> t:::i)
 			.groupBy(_.url)
 			.map(group => {
-				(group._1,group._2(0).title) match {
+				/*Sometimes the title and/or the date do not exist (Option) so we handle that*/
+				val sorted = dist(group._2).sortBy(_.created_time)
+				
+				/*Extracting the timestamp*/
+				val timestamp = {
+					sorted(1).created_time match{
+					  case x if x.length()>19 => formatFB.parse(x).getTime()
+					  case x => formatDQ.parse(x).getTime()
+					}
+				}
+				(group._1,group._2(0).title) match {					
 				  	case (Some(s),Some(t)) =>
-				  		new Article(s,t,dist(group._2).sortBy(_.created_time))
+				  		new Article(s,t,timestamp,sorted)
 				  	case (Some(s),None) =>
-				  		new Article(s,"Did not get this article's title",dist(group._2).sortBy(_.created_time))
+				  		new Article(s,"Did not get this article's title",timestamp,sorted)
 				  	case _ =>
-				  		new Article("unknown","Did not get this article's title",dist(group._2).sortBy(_.created_time))
+				  		new Article("unknown","Did not get this article's title",timestamp	,sorted)
 				}
 				
 			})

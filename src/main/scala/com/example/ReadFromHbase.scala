@@ -20,7 +20,7 @@ import org.apache.hadoop.hbase.client.HConnectionManager
 
 case class Comment(created_time:String,from:String,like_count:Int,message:String,url:Option[String],title:Option[String])
 
-case class Article(url:String,title:String,comments:List[Comment])
+case class Article(url:String,title:String,firstPost:Long,comments:List[Comment])
 /*Case class for Tweet Message*/
 case class Tweet(message:String,createdAt:Long,latitude:Double,longitude:Double,id:Long,rt_count:Int,from:String,from_pic:String,from_url:String)
 

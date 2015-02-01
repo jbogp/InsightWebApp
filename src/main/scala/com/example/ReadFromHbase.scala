@@ -68,6 +68,35 @@ object ReadFromHbase {
 		ret		
 	}
 	
+	
+	/*Generic Hbase reader to fetch all the rows of a table beetween 2 times and create objects out of that*/
+	def readTimestampGeneric[T](table:String,msSecondsBackMax:Int,handleRow:Result=>T,column:String):ArrayBuffer[T] = {
+		/*Fetch the table*/
+	  
+		val httable = conn.getTable(table)
+		
+		
+		
+
+		val theScan = new Scan()
+			.addColumn("infos".getBytes(),column.getBytes())
+			.setTimeRange(Calendar.getInstance().getTimeInMillis()-msSecondsBackMax, Calendar.getInstance().getTimeInMillis())
+			
+			
+		
+		
+		/*Adding timestamp filter*/
+		val res = httable.getScanner(theScan)
+
+		val iterator = res.iterator()
+		val ret = new ArrayBuffer[T]
+		while(iterator.hasNext()) {
+			val next = iterator.next()
+			ret.append(handleRow(next))		
+		}
+		ret		
+	}
+	
 
 	
 	
@@ -112,7 +141,7 @@ object ReadFromHbase {
 		readTimeFilterGeneric[List[Comment]](table, minutesBackMax, minutesBackMin, handleRow,column)
 	}
 	
-	def readFutureTimeFilterTweets(table:String,column:String,minutesBackMax:Int,minutesBackMin:Int):Future[ArrayBuffer[Tweet]] = Future {
+	def readFutureTimeFilterTweets(table:String,column:String,timestampBack:Int):Future[ArrayBuffer[Tweet]] = Future {
 		/*function to handle meta link results*/
 		def handleRow(next:Result):Tweet = {
 			/*getting comments*/
@@ -126,7 +155,7 @@ object ReadFromHbase {
 			json.extract[Tweet]
 		}
 		/*Calling the database*/
-		readTimeFilterGeneric[Tweet](table, minutesBackMax, minutesBackMin, handleRow,column)
+		readTimestampGeneric[Tweet](table, timestampBack, handleRow,column)
 	}
 
 }

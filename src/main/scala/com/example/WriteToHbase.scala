@@ -10,6 +10,7 @@ import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.hbase.util.Bytes
 import java.security.MessageDigest
 import java.util.Calendar
+import org.apache.hadoop.hbase.client.Scan
 
 /*Stores and reads values in the Hbase*/
 case class WriteToHbase() {
@@ -34,7 +35,7 @@ case class WriteToHbase() {
 		})
 	
 	}
-	
+
 	
 
 	def rowExists(table:String, rowkey:String):Boolean = {
